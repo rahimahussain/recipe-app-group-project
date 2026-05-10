@@ -14,55 +14,67 @@
 </header>
 
 <section class="search-section">
-    <input type="text" placeholder="Search by name, ingredient, cuisine...">
-    <button class="btn-search">Search</button>
+    <div class="search-container">
+        <input type="text" placeholder="Search by name, ingredient, cuisine...">
+        <button class="btn-search">Search</button>
+    </div>
     <a href="#" class="advanced-search">Advanced Search →</a>
 </section>
 
-<main class="container">
+<main class="main-layout">
     <aside class="sidebar">
         <h3>Filters</h3>
-        <ul>
-            <li>All (8)</li>
+        <ul class="filter-list">
+            <li class="active">All (8)</li>
             <li>Vegetarian (6)</li>
             <li>Main (4)</li>
             <li>Vegan (3)</li>
             <li>Meat (2)</li>
-            </ul>
+            <li>Dessert (2)</li>
+            <li>Healthy (2)</li>
+            <li>Italian (2)</li>
+        </ul>
+        
+        <div class="stats">
+            <p>🍳 8 Recipes</p>
+            <p>🌎 7 Cuisines</p>
+            <p>🌱 3 Diet Types</p>
+        </div>
     </aside>
 
     <section class="recipes-grid">
         <article class="recipe-card">
-            <div class="card-tag meat">Meat</div>
-            <div class="rating">⭐ 4.2</div>
-            <img src="assets/bolognese.jpg" alt="Spaghetti Bolognese">
+            <div class="card-badge meat">Meat</div>
+            <div class="rating-tag">⭐ 4.2</div>
+            <div class="card-image" style="background-color: #ddd; height: 150px;"></div> 
             <div class="card-content">
-                <span class="cuisine">Italian</span>
+                <span class="cuisine-type">Italian</span>
                 <h3>Spaghetti Bolognese</h3>
-                <p>A classic Italian meat sauce, rich with beef mince...</p>
-                <div class="meta-info">
+                <p>A classic Italian meat sauce, rich with beef mince, bacon, and red wine...</p>
+                <div class="recipe-meta">
                     <span>🕐 110 min</span>
                     <span>👥 6 servings</span>
+                    <span>🔥 624 kcal</span>
                 </div>
             </div>
         </article>
 
         <article class="recipe-card">
-            <div class="card-tag vegan">Vegan</div>
-            <div class="rating">⭐ 3.0</div>
-            <img src="assets/pancakes.jpg" alt="Vegan Pancakes">
+            <div class="card-badge vegan">Vegan</div>
+            <div class="rating-tag">⭐ 3.0</div>
+            <div class="card-image" style="background-color: #eee; height: 150px;"></div>
             <div class="card-content">
-                <span class="cuisine">American</span>
+                <span class="cuisine-type">American</span>
                 <h3>Vegan American Pancakes</h3>
-                <p>Light and fluffy American-style pancakes made without eggs...</p>
-                <div class="meta-info">
+                <p>Light and fluffy American-style pancakes made without eggs or dairy...</p>
+                <div class="recipe-meta">
                     <span>🕐 30 min</span>
                     <span>👥 4 servings</span>
+                    <span>🔥 210 kcal</span>
                 </div>
             </div>
         </article>
-
-        </section>
+    </section>
 </main>
 
 </body>
