@@ -14,13 +14,12 @@
 </header>
 
 <section class="search-section">
-    <div class="search-container">
-        <input type="text" placeholder="Search by name, ingredient, cuisine...">
-        <button class="btn-search">Search</button>
-    </div>
+    <form action="search.php" method="GET" class="search-container">
+        <input type="text" name="query" placeholder="Search by name, ingredient, cuisine...">
+        <button type="submit" class="btn-search">Search</button>
+    </form>
     <a href="#" class="advanced-search">Advanced Search →</a>
 </section>
-
 <main class="main-layout">
     <aside class="sidebar">
         <h3>Filters</h3>
