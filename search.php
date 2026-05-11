@@ -1,7 +1,7 @@
 <?php 
 include('db/connection.php'); 
 
-// جلب كلمة البحث من الرابط (URL)
+// Retrieved the search term from the link (URL)
 $search_query = isset($_GET['query']) ? $_GET['query'] : '';
 ?>
 
@@ -33,7 +33,7 @@ $search_query = isset($_GET['query']) ? $_GET['query'] : '';
 
     <section class="recipes-grid">
         <?php
-        // كود برمجي للبحث في قاعدة البيانات
+        // Database search code
         $sql = "SELECT * FROM recipes WHERE title LIKE '%$search_query%' OR cuisine LIKE '%$search_query%'";
         $result = $conn->query($sql);
 
