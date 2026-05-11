@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Recipe App - Discover delicious recipes for every occasion">
+    <title>Recipe App - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header" role="banner">
+    <div class="container">
+        <a href="index.html" class="logo" aria-label="Recipe App Home">
+            <span class="logo-icon">🍳</span>
+            <span class="logo-text">Recipe App</span>
+        </a>
+
+        <button class="mobile-menu-btn" aria-expanded="false" aria-label="Toggle menu">☰</button>
+
+        <nav class="main-nav" role="navigation" aria-label="Main navigation">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="recipes.html" class="nav-link">Recipes</a>
+            <div class="user-menu">
+                <!-- Populated by JavaScript -->
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Discover Delicious Recipes</h1>
+            <p class="hero-subtitle">
+                Search through our curated collection of recipes, save your favourites,
+                and share your ratings with the community.
+            </p>
+            <a href="recipes.html" class="btn btn-primary btn-lg">Browse All Recipes</a>
+        </div>
+    </section>
+
+    <!-- Featured Recipes -->
+    <section class="container">
+        <h2 style="margin-bottom: var(--spacing-xl);">Featured Recipes</h2>
+        <div class="recipe-grid" id="featured-recipes">
+            <!-- Populated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="container" style="margin-top: var(--spacing-xxl); margin-bottom: var(--spacing-xxl);">
+        <h2 style="margin-bottom: var(--spacing-xl);">Browse by Category</h2>
+        <div class="category-grid" id="category-grid">
+            <!-- Populated by JavaScript -->
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="container">
+        <p>&copy; 2024 Recipe App. Recipes inspired by BBC Food.</p>
+        <nav aria-label="Footer navigation">
+            <a href="index.html">Home</a> |
+            <a href="recipes.html">Recipes</a> |
+            <a href="login.html">Login</a> |
+            <a href="register.html">Register</a>
+        </nav>
+    </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/recipes.js"></script>
+</body>
+</html>
