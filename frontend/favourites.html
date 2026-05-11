@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your favourite recipes">
+    <title>My Favourites - Recipe App</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header" role="banner">
+    <div class="container">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">🍳</span>
+            <span class="logo-text">Recipe App</span>
+        </a>
+        <button class="mobile-menu-btn" aria-expanded="false" aria-label="Toggle menu">☰</button>
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="recipes.html" class="nav-link">Recipes</a>
+            <div class="user-menu"></div>
+        </nav>
+    </div>
+</header>
+
+<main id="main-content" class="container" style="padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xxl);">
+    <h1>My Favourite Recipes</h1>
+
+    <div id="favourites-list" class="recipe-list" aria-live="polite">
+        <!-- Populated by JavaScript -->
+    </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="container">
+        <p>&copy; 2026 Recipe App.</p>
+    </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/favourites.js"></script>
+</body>
+</html>

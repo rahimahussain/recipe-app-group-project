@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create a new Recipe App account">
+    <title>Register - Recipe App</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header" role="banner">
+    <div class="container">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">🍳</span>
+            <span class="logo-text">Recipe App</span>
+        </a>
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="recipes.html" class="nav-link">Recipes</a>
+            <div class="user-menu"></div>
+        </nav>
+    </div>
+</header>
+
+<main id="main-content" class="container auth-page">
+    <div class="auth-card">
+        <h1 class="auth-title">Create Your Account</h1>
+
+        <form id="register-form" novalidate>
+            <div class="form-group">
+                <label for="username" class="form-label form-label-required">Username</label>
+                <input type="text" id="username" name="username" class="form-input"
+                       required minlength="3" maxlength="50" pattern="[a-zA-Z0-9_]+"
+                       aria-describedby="username-help">
+                <span id="username-help" class="form-help">3-50 characters. Letters, numbers, and underscores only.</span>
+                <span id="username-error" class="form-error-message" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label form-label-required">Email Address</label>
+                <input type="email" id="email" name="email" class="form-input"
+                       required autocomplete="email">
+                <span id="email-error" class="form-error-message" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="full_name" class="form-label">Full Name</label>
+                <input type="text" id="full_name" name="full_name" class="form-input"
+                       maxlength="100" autocomplete="name">
+            </div>
+
+            <div class="form-group">
+                <label for="dietary_preference" class="form-label">Dietary Preference</label>
+                <select id="dietary_preference" name="dietary_preference" class="form-select">
+                    <option value="None">No preference</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Vegan">Vegan</option>
+                    <option value="Non-vegetarian">Non-vegetarian</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label form-label-required">Password</label>
+                <input type="password" id="password" name="password" class="form-input"
+                       required minlength="8" autocomplete="new-password"
+                       aria-describedby="password-help">
+                <span id="password-help" class="form-help">At least 8 characters with one letter and one number.</span>
+                <span id="password-error" class="form-error-message" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password" class="form-label form-label-required">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-input"
+                       required autocomplete="new-password">
+                <span id="confirm_password-error" class="form-error-message" role="alert"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Create Account</button>
+        </form>
+
+        <p style="text-align: center; margin-top: var(--spacing-lg);">
+            Already have an account? <a href="login.html">Log in here</a>.
+        </p>
+    </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="container">
+        <p>&copy; 2026 Recipe App.</p>
+    </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

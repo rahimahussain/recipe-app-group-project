@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Search and browse recipes">
+    <title>Search Recipes - Recipe App</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header" role="banner">
+    <div class="container">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">🍳</span>
+            <span class="logo-text">Recipe App</span>
+        </a>
+        <button class="mobile-menu-btn" aria-expanded="false" aria-label="Toggle menu">☰</button>
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="recipes.html" class="nav-link active">Recipes</a>
+            <div class="user-menu"></div>
+        </nav>
+    </div>
+</header>
+
+<main id="main-content" class="container" style="padding-top: var(--spacing-xl);">
+    <h1>Search Recipes</h1>
+
+    <section class="search-section" role="search" aria-label="Recipe search">
+        <form id="search-form" class="search-form">
+            <div class="form-group">
+                <label for="search-query" class="sr-only">Search recipes</label>
+                <input type="text" id="search-query" name="q" class="form-input"
+                       placeholder="Search by name or description...">
+            </div>
+
+            <div class="search-filters" style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+                <select name="category" class="form-select" aria-label="Filter by category">
+                    <option value="">All Categories</option>
+                    <!-- Populated by JS -->
+                </select>
+
+                <select name="difficulty" class="form-select" aria-label="Filter by difficulty">
+                    <option value="">Any Difficulty</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                </select>
+
+                <select name="dietary" class="form-select" aria-label="Filter by dietary requirement">
+                    <option value="">Any Diet</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="vegan">Vegan</option>
+                </select>
+
+                <input type="number" name="max_time" class="form-input"
+                       placeholder="Max time (min)" style="width: 150px;" aria-label="Maximum cooking time in minutes">
+
+                <select name="sort" class="form-select" aria-label="Sort results">
+                    <option value="title_asc">Name (A-Z)</option>
+                    <option value="title_desc">Name (Z-A)</option>
+                    <option value="rating_desc">Highest Rated</option>
+                    <option value="rating_asc">Lowest Rated</option>
+                    <option value="time_asc">Quickest</option>
+                    <option value="time_desc">Longest</option>
+                    <option value="difficulty_asc">Easiest First</option>
+                    <option value="difficulty_desc">Hardest First</option>
+                    <option value="newest">Newest First</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="reset" class="btn btn-ghost" onclick="window.location='recipes.html'">Clear</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="recipe-list" id="recipe-list" aria-live="polite">
+        <!-- Populated by JavaScript -->
+    </section>
+
+    <div style="text-align: center; margin: var(--spacing-xl) 0;">
+        <button id="load-more-btn" class="btn btn-secondary" style="display: none;">
+            Load More Recipes
+        </button>
+    </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="container">
+        <p>&copy; 2026 Recipe App.</p>
+    </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/recipes.js"></script>
+</body>
+</html>
