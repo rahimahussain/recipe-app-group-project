@@ -15,7 +15,7 @@
 
 <section class="search-section">
     <form action="search.php" method="GET" class="search-container">
-        <input type="text" name="query" placeholder="Search by name, ingredient, cuisine...">
+        <input type="text" name="query" placeholder="Search by name or description...">
         <button type="submit" class="btn-search">Search</button>
     </form>
     <a href="#" class="advanced-search">Advanced Search →</a>
@@ -31,12 +31,10 @@
             <li>Meat (2)</li>
             <li>Dessert (2)</li>
             <li>Healthy (2)</li>
-            <li>Italian (2)</li>
         </ul>
         
         <div class="stats">
             <p>🍳 8 Recipes</p>
-            <p>🌎 7 Cuisines</p>
             <p>🌱 3 Diet Types</p>
         </div>
     </aside>
@@ -44,32 +42,26 @@
     <section class="recipes-grid">
         <article class="recipe-card">
             <div class="card-badge meat">Meat</div>
-            <div class="rating-tag">⭐ 4.2</div>
             <div class="card-image" style="background-color: #ddd; height: 150px;"></div> 
             <div class="card-content">
-                <span class="cuisine-type">Italian</span>
                 <h3>Spaghetti Bolognese</h3>
                 <p>A classic Italian meat sauce, rich with beef mince, bacon, and red wine...</p>
                 <div class="recipe-meta">
                     <span>🕐 110 min</span>
                     <span>👥 6 servings</span>
-                    <span>🔥 624 kcal</span>
                 </div>
             </div>
         </article>
 
         <article class="recipe-card">
             <div class="card-badge vegan">Vegan</div>
-            <div class="rating-tag">⭐ 3.0</div>
             <div class="card-image" style="background-color: #eee; height: 150px;"></div>
             <div class="card-content">
-                <span class="cuisine-type">American</span>
                 <h3>Vegan American Pancakes</h3>
                 <p>Light and fluffy American-style pancakes made without eggs or dairy...</p>
                 <div class="recipe-meta">
                     <span>🕐 30 min</span>
                     <span>👥 4 servings</span>
-                    <span>🔥 210 kcal</span>
                 </div>
             </div>
         </article>
