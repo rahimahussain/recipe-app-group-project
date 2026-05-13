@@ -1,7 +1,6 @@
 <?php 
 include('db/connection.php'); 
 
-// Retrieved the search term from the link (URL)
 $search_query = isset($_GET['query']) ? $_GET['query'] : '';
 ?>
 
@@ -33,22 +32,19 @@ $search_query = isset($_GET['query']) ? $_GET['query'] : '';
 
     <section class="recipes-grid">
         <?php
-        // Database search code
-        $sql = "SELECT * FROM recipes WHERE title LIKE '%$search_query%' OR cuisine LIKE '%$search_query%'";
+        $safe_search_query = $conn->real_escape_string($search_query);
+        $sql = "SELECT * FROM recipes WHERE title LIKE '%$safe_search_query%' OR description LIKE '%$safe_search_query%'";
         $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 ?>
                 <article class="recipe-card">
-                    <div class="card-badge"><?php echo $row['cuisine']; ?></div>
-                    <div class="rating-tag">⭐ <?php echo $row['rating']; ?></div>
                     <div class="card-content">
-                        <h3><?php echo $row['title']; ?></h3>
-                        <p><?php echo substr($row['description'], 0, 100); ?>...</p>
+                        <h3><?php echo htmlspecialchars($row['title']); ?></h3>
+                        <p><?php echo htmlspecialchars(substr($row['description'], 0, 100)); ?>...</p>
                         <div class="recipe-meta">
-                            <span>🕐 <?php echo $row['cooking_time']; ?> min</span>
-                            <span>🔥 <?php echo $row['calories']; ?> kcal</span>
+                            <span>🕐 <?php echo $row['cook_time_minutes']; ?> min</span>
                         </div>
                     </div>
                 </article>
