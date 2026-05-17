@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Recipe App - Discover delicious recipes for every occasion">
-    <title>Recipe App - Home</title>
+    <meta name="description" content="Recipe App - Discover delicious recipes for every occasion. Search, save, and rate your favorite recipes.">
+    <title>Recipe App - Discover Delicious Recipes</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,12 +16,11 @@
             <span class="logo-icon">🍳</span>
             <span class="logo-text">Recipe App</span>
         </a>
-
         <button class="mobile-menu-btn" aria-expanded="false" aria-label="Toggle menu">☰</button>
-
         <nav class="main-nav" role="navigation" aria-label="Main navigation">
             <a href="index.html" class="nav-link active">Home</a>
             <a href="recipes.html" class="nav-link">Recipes</a>
+            <a href="favourites.html" class="nav-link">Favourites</a>
             <div class="user-menu">
                 <!-- Populated by JavaScript -->
             </div>
@@ -35,39 +34,122 @@
         <div class="container">
             <h1 class="hero-title">Discover Delicious Recipes</h1>
             <p class="hero-subtitle">
-                Search through our curated collection of recipes, save your favourites,
-                and share your ratings with the community.
+                Explore our curated collection of recipes from talented chefs.
+                Save your favourites, share ratings, and cook with confidence.
             </p>
-            <a href="recipes.html" class="btn btn-primary btn-lg">Browse All Recipes</a>
+            <div class="hero-search">
+                <input type="text" id="search-query" class="form-input hero-search-input"
+                       placeholder="Search recipes by name, ingredient, or cuisine..."
+                       aria-label="Search recipes">
+                <button class="btn btn-primary btn-lg" onclick="window.location.href='recipes.html?q=' + encodeURIComponent(document.getElementById('search-query').value)">
+                    🔍 Search
+                </button>
+                <div id="search-suggestions" class="search-suggestions" style="display: none;"></div>
+            </div>
+            <div class="hero-links">
+                <a href="recipes.html" class="btn btn-outline btn-lg">Browse All Recipes</a>
+                <a href="recipes.html?sort=rating_desc" class="btn btn-outline btn-lg">Top Rated</a>
+                <a href="recipes.html?sort=newest" class="btn btn-outline btn-lg">Newest</a>
+            </div>
         </div>
     </section>
 
     <!-- Featured Recipes -->
-    <section class="container">
-        <h2 style="margin-bottom: var(--spacing-xl);">Featured Recipes</h2>
+    <section class="container section-spacing">
+        <div class="section-header">
+            <h2>⭐ Featured Recipes</h2>
+            <a href="recipes.html?is_featured=true" class="see-all-link">See All →</a>
+        </div>
         <div class="recipe-grid" id="featured-recipes">
+            <!-- Populated by JavaScript -->
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading featured recipes...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Recipes -->
+    <section class="container section-spacing">
+        <div class="section-header">
+            <h2>🆕 Latest Recipes</h2>
+            <a href="recipes.html?sort=newest" class="see-all-link">See All →</a>
+        </div>
+        <div class="recipe-grid" id="latest-recipes">
+            <!-- Populated by JavaScript -->
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading latest recipes...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Browse Categories -->
+    <section class="container section-spacing">
+        <h2>📂 Browse by Category</h2>
+        <div class="category-grid" id="category-grid">
+            <!-- Populated by JavaScript -->
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading categories...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Recipes -->
+    <section class="container section-spacing">
+        <div class="section-header">
+            <h2>🔥 Trending Now</h2>
+            <span class="section-subtitle">Most viewed recipes this month</span>
+        </div>
+        <div class="trending-list" id="trending-recipes">
             <!-- Populated by JavaScript -->
         </div>
     </section>
 
-    <!-- Categories -->
-    <section class="container" style="margin-top: var(--spacing-xxl); margin-bottom: var(--spacing-xxl);">
-        <h2 style="margin-bottom: var(--spacing-xl);">Browse by Category</h2>
-        <div class="category-grid" id="category-grid">
-            <!-- Populated by JavaScript -->
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Start Cooking?</h2>
+            <p>Join our community of home cooks and professional chefs. Share your recipes and discover new favorites.</p>
+            <div class="cta-buttons">
+                <a href="register.html" class="btn btn-primary btn-lg">Create Free Account</a>
+                <a href="recipes.html" class="btn btn-outline btn-lg">Explore Recipes</a>
+            </div>
         </div>
     </section>
 </main>
 
 <footer class="site-footer" role="contentinfo">
     <div class="container">
-        <p>&copy; 2024 Recipe App. Recipes inspired by BBC Food.</p>
-        <nav aria-label="Footer navigation">
-            <a href="index.html">Home</a> |
-            <a href="recipes.html">Recipes</a> |
-            <a href="login.html">Login</a> |
-            <a href="register.html">Register</a>
-        </nav>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>🍳 Recipe App</h4>
+                <p>Your go-to destination for delicious recipes from around the world.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <nav aria-label="Footer quick links">
+                    <a href="index.html">Home</a>
+                    <a href="recipes.html">Recipes</a>
+                    <a href="favourites.html">Favourites</a>
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                </nav>
+            </div>
+            <div class="footer-section">
+                <h4>Categories</h4>
+                <nav aria-label="Footer categories">
+                    <a href="recipes.html?difficulty=Easy">Easy Recipes</a>
+                    <a href="recipes.html?difficulty=Medium">Medium Recipes</a>
+                    <a href="recipes.html?dietary=vegetarian">Vegetarian</a>
+                    <a href="recipes.html?dietary=vegan">Vegan</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year">2024</span> Recipe App.</p>
+        </div>
     </div>
 </footer>
 

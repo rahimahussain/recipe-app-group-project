@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Log in to your Recipe App account">
+    <meta name="description" content="Log in to your Recipe App account to save recipes, rate dishes, and more">
     <title>Login - Recipe App</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -12,7 +12,7 @@
 
 <header class="site-header" role="banner">
     <div class="container">
-        <a href="index.html" class="logo">
+        <a href="index.html" class="logo" aria-label="Recipe App Home">
             <span class="logo-icon">🍳</span>
             <span class="logo-text">Recipe App</span>
         </a>
@@ -26,7 +26,10 @@
 
 <main id="main-content" class="container auth-page">
     <div class="auth-card">
-        <h1 class="auth-title">Welcome Back</h1>
+        <div class="auth-header">
+            <h1 class="auth-title">Welcome Back!</h1>
+            <p class="auth-subtitle">Log in to access your saved recipes and ratings.</p>
+        </div>
 
         <div id="login-message" class="alert" style="display: none;" role="alert"></div>
 
@@ -34,30 +37,43 @@
             <div class="form-group">
                 <label for="username" class="form-label form-label-required">Username or Email</label>
                 <input type="text" id="username" name="username" class="form-input"
-                       required autocomplete="username" aria-describedby="username-help">
-                <span id="username-help" class="form-help">Enter your username or email address.</span>
+                       required autocomplete="username"
+                       placeholder="Enter your username or email">
                 <span id="username-error" class="form-error-message" role="alert"></span>
             </div>
 
             <div class="form-group">
                 <label for="password" class="form-label form-label-required">Password</label>
                 <input type="password" id="password" name="password" class="form-input"
-                       required autocomplete="current-password">
+                       required autocomplete="current-password"
+                       placeholder="Enter your password">
                 <span id="password-error" class="form-error-message" role="alert"></span>
+            </div>
+
+            <div class="form-group form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="remember_me" value="1">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block btn-lg">Log In</button>
         </form>
 
-        <p style="text-align: center; margin-top: var(--spacing-lg);">
-            Don't have an account? <a href="register.html">Register here</a>.
-        </p>
+        <div class="auth-divider">
+            <span>or</span>
+        </div>
+
+        <div class="auth-alt-links">
+            <p>Don't have an account? <a href="register.html">Create one here</a>.</p>
+        </div>
     </div>
 </main>
 
 <footer class="site-footer" role="contentinfo">
     <div class="container">
-        <p>&copy; 2026 Recipe App.</p>
+        <p>&copy; <span id="current-year">2024</span> Recipe App.</p>
     </div>
 </footer>
 

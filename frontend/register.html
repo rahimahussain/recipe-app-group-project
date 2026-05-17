@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Create a new Recipe App account">
+    <meta name="description" content="Create your Recipe App account and start saving your favourite recipes">
     <title>Register - Recipe App</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -12,7 +12,7 @@
 
 <header class="site-header" role="banner">
     <div class="container">
-        <a href="index.html" class="logo">
+        <a href="index.html" class="logo" aria-label="Recipe App Home">
             <span class="logo-icon">🍳</span>
             <span class="logo-text">Recipe App</span>
         </a>
@@ -26,39 +26,61 @@
 
 <main id="main-content" class="container auth-page">
     <div class="auth-card">
-        <h1 class="auth-title">Create Your Account</h1>
+        <div class="auth-header">
+            <h1 class="auth-title">Create Your Account</h1>
+            <p class="auth-subtitle">Join our community and start discovering delicious recipes.</p>
+        </div>
 
         <form id="register-form" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_name" class="form-label form-label-required">First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="form-input"
+                           required maxlength="50" autocomplete="given-name"
+                           placeholder="John">
+                    <span id="first_name-error" class="form-error-message" role="alert"></span>
+                </div>
+                <div class="form-group">
+                    <label for="last_name" class="form-label form-label-required">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" class="form-input"
+                           required maxlength="50" autocomplete="family-name"
+                           placeholder="Doe">
+                    <span id="last_name-error" class="form-error-message" role="alert"></span>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label for="username" class="form-label form-label-required">Username</label>
                 <input type="text" id="username" name="username" class="form-input"
                        required minlength="3" maxlength="50" pattern="[a-zA-Z0-9_]+"
+                       autocomplete="username" placeholder="johndoe"
                        aria-describedby="username-help">
-                <span id="username-help" class="form-help">3-50 characters. Letters, numbers, and underscores only.</span>
+                <span id="username-help" class="form-help">3-50 characters. Only letters, numbers, and underscores.</span>
                 <span id="username-error" class="form-error-message" role="alert"></span>
             </div>
 
             <div class="form-group">
                 <label for="email" class="form-label form-label-required">Email Address</label>
                 <input type="email" id="email" name="email" class="form-input"
-                       required autocomplete="email">
+                       required autocomplete="email" placeholder="john@example.com">
                 <span id="email-error" class="form-error-message" role="alert"></span>
             </div>
 
-            <div class="form-group">
-                <label for="full_name" class="form-label">Full Name</label>
-                <input type="text" id="full_name" name="full_name" class="form-input"
-                       maxlength="100" autocomplete="name">
-            </div>
-
-            <div class="form-group">
-                <label for="dietary_preference" class="form-label">Dietary Preference</label>
-                <select id="dietary_preference" name="dietary_preference" class="form-select">
-                    <option value="None">No preference</option>
-                    <option value="Vegetarian">Vegetarian</option>
-                    <option value="Vegan">Vegan</option>
-                    <option value="Non-vegetarian">Non-vegetarian</option>
-                </select>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dietary_preference" class="form-label">Dietary Preference</label>
+                    <select id="dietary_preference" name="dietary_preference" class="form-select">
+                        <option value="None">No preference</option>
+                        <option value="Vegetarian">Vegetarian</option>
+                        <option value="Vegan">Vegan</option>
+                        <option value="Non-vegetarian">Non-vegetarian</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="phone_number" class="form-label">Phone Number</label>
+                    <input type="tel" id="phone_number" name="phone_number" class="form-input"
+                           maxlength="30" autocomplete="tel" placeholder="+1234567890">
+                </div>
             </div>
 
             <div class="form-group">
@@ -66,7 +88,9 @@
                 <input type="password" id="password" name="password" class="form-input"
                        required minlength="8" autocomplete="new-password"
                        aria-describedby="password-help">
-                <span id="password-help" class="form-help">At least 8 characters with one letter and one number.</span>
+                <span id="password-help" class="form-help">
+                        At least 8 characters with at least one letter and one number.
+                    </span>
                 <span id="password-error" class="form-error-message" role="alert"></span>
             </div>
 
@@ -77,18 +101,29 @@
                 <span id="confirm_password-error" class="form-error-message" role="alert"></span>
             </div>
 
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" required>
+                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                </label>
+            </div>
+
             <button type="submit" class="btn btn-primary btn-block btn-lg">Create Account</button>
         </form>
 
-        <p style="text-align: center; margin-top: var(--spacing-lg);">
-            Already have an account? <a href="login.html">Log in here</a>.
-        </p>
+        <div class="auth-divider">
+            <span>or</span>
+        </div>
+
+        <div class="auth-alt-links">
+            <p>Already have an account? <a href="login.html">Log in here</a>.</p>
+        </div>
     </div>
 </main>
 
 <footer class="site-footer" role="contentinfo">
     <div class="container">
-        <p>&copy; 2026 Recipe App.</p>
+        <p>&copy; <span id="current-year">2024</span> Recipe App.</p>
     </div>
 </footer>
 

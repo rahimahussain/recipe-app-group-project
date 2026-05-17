@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Your favourite recipes">
+    <meta name="description" content="View and manage your favourite saved recipes">
     <title>My Favourites - Recipe App</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -12,7 +12,7 @@
 
 <header class="site-header" role="banner">
     <div class="container">
-        <a href="index.html" class="logo">
+        <a href="index.html" class="logo" aria-label="Recipe App Home">
             <span class="logo-icon">🍳</span>
             <span class="logo-text">Recipe App</span>
         </a>
@@ -20,26 +20,81 @@
         <nav class="main-nav">
             <a href="index.html" class="nav-link">Home</a>
             <a href="recipes.html" class="nav-link">Recipes</a>
+            <a href="favourites.html" class="nav-link active">Favourites</a>
             <div class="user-menu"></div>
         </nav>
     </div>
 </header>
 
 <main id="main-content" class="container" style="padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xxl);">
-    <h1>My Favourite Recipes</h1>
+    <div class="page-header">
+        <h1>❤️ My Favourite Recipes</h1>
+        <div class="favourites-actions">
+            <div class="folder-filter">
+                <label for="folder-filter-select" class="sr-only">Filter by folder</label>
+                <select id="folder-filter-select" class="form-select">
+                    <option value="">All Folders</option>
+                </select>
+            </div>
+        </div>
+    </div>
 
+    <!-- Favourites List -->
     <div id="favourites-list" class="recipe-list" aria-live="polite">
-        <!-- Populated by JavaScript -->
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading your favourites...</p>
+        </div>
+    </div>
+
+    <!-- Load More -->
+    <div class="load-more-container" style="text-align: center; margin-top: var(--spacing-xl);">
+        <button id="load-more-btn" class="btn btn-secondary btn-lg" style="display: none;">
+            Load More
+        </button>
     </div>
 </main>
 
 <footer class="site-footer" role="contentinfo">
     <div class="container">
-        <p>&copy; 2026 Recipe App.</p>
+        <p>&copy; <span id="current-year">2024</span> Recipe App.</p>
     </div>
 </footer>
 
 <script src="js/app.js"></script>
 <script src="js/favourites.js"></script>
+<script>
+    // Load folders for filter
+    (async () => {
+        if (!app.state.isAuthenticated) return;
+
+        try {
+            const response = await app.apiRequest('favourites.php?folders=true');
+            if (response.success) {
+                const select = document.getElementById('folder-filter-select');
+                response.folders.forEach(folder => {
+                    const option = document.createElement('option');
+                    option.value = folder.folder_name || '';
+                    option.textContent = folder.folder_name
+                        ? `${folder.folder_name} (${folder.recipe_count})`
+                        : `Uncategorized (${folder.recipe_count})`;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load folders:', error);
+        }
+    })();
+
+    // Filter by folder
+    document.getElementById('folder-filter-select')?.addEventListener('change', function() {
+        const folder = this.value;
+        const url = folder
+            ? `favourites.php?folder=${encodeURIComponent(folder)}`
+            : 'favourites.php';
+        // Trigger reload in favourites.js
+        window.location.search = folder ? `?folder=${encodeURIComponent(folder)}` : '';
+    });
+</script>
 </body>
 </html>
