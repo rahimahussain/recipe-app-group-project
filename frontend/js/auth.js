@@ -1,6 +1,7 @@
 /**
  * Authentication Module
- * Handles login and registration forms
+ * Handles login, registration, password management, and profile
+ * Updated for enterprise schema with first_name/last_name
  */
 
 class AuthManager {
@@ -11,6 +12,7 @@ class AuthManager {
     initForms() {
         this.setupLoginForm();
         this.setupRegisterForm();
+        this.setupProfileForm();
         this.handleRedirect();
     }
 
@@ -45,23 +47,26 @@ class AuthManager {
                     app.state.token = response.token;
                     app.state.user = response.user;
                     app.state.isAuthenticated = true;
+                    app.state.isAdmin = response.user.role === 'Admin';
+                    app.state.isModerator = ['Admin', 'Moderator'].includes(response.user.role);
                     app.updateNavigation();
 
-                    app.showToast(response.message, 'success');
+                    app.showToast(`Welcome back, ${response.user.first_name || response.user.username}!`, 'success');
 
                     // Redirect to intended page or home
                     const params = new URLSearchParams(window.location.search);
                     const redirect = params.get('redirect') || 'index.html';
+
                     setTimeout(() => {
                         window.location.href = redirect;
                     }, 500);
 
                 } else {
-                    app.showToast(response.message, 'error');
+                    app.showToast(response.message || 'Login failed.', 'error');
                 }
 
             } catch (error) {
-                app.showToast('Login failed. Please try again.', 'error');
+                app.showToast(error.message || 'Login failed. Please try again.', 'error');
             } finally {
                 this.setLoading(submitBtn, false);
             }
@@ -84,47 +89,161 @@ class AuthManager {
             this.setLoading(submitBtn, true);
 
             const formData = new FormData(registerForm);
+            const data = Object.fromEntries(formData);
+
+            // Add default role
+            data.role = 'User';
 
             try {
                 const response = await app.apiRequest('register.php', {
                     method: 'POST',
-                    body: JSON.stringify(Object.fromEntries(formData))
+                    body: JSON.stringify(data)
                 });
 
                 if (response.success) {
-                    app.showToast(response.message, 'success');
+                    app.showToast('Registration successful! Please log in.', 'success');
+                    registerForm.reset();
+
                     setTimeout(() => {
                         window.location.href = 'login.html';
-                    }, 1000);
+                    }, 1500);
                 } else {
-                    app.showToast(response.message, 'error');
+                    app.showToast(response.message || 'Registration failed.', 'error');
+
+                    // Highlight specific field errors if provided
+                    if (response.errors) {
+                        Object.entries(response.errors).forEach(([field, message]) => {
+                            const input = registerForm.querySelector(`[name="${field}"]`);
+                            if (input) {
+                                this.showFieldError(input, message);
+                            }
+                        });
+                    }
                 }
 
             } catch (error) {
-                app.showToast('Registration failed. Please try again.', 'error');
+                app.showToast(error.message || 'Registration failed. Please try again.', 'error');
             } finally {
                 this.setLoading(submitBtn, false);
             }
         });
 
-        // Real-time password match validation
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('confirm_password');
+        // Real-time validation
+        this.setupRealTimeValidation(registerForm);
+    }
 
-        if (password && confirmPassword) {
-            confirmPassword.addEventListener('input', () => {
-                const errorEl = document.getElementById('confirm_password-error');
-                if (password.value !== confirmPassword.value) {
-                    confirmPassword.classList.add('error');
-                    if (errorEl) {
-                        errorEl.textContent = 'Passwords do not match.';
-                        errorEl.classList.add('visible');
+    /**
+     * Setup profile update form
+     */
+    setupProfileForm() {
+        const profileForm = document.getElementById('profile-form');
+        if (!profileForm) return;
+
+        // Load current profile data
+        this.loadProfileData(profileForm);
+
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = profileForm.querySelector('button[type="submit"]');
+            this.setLoading(submitBtn, true);
+
+            const formData = new FormData(profileForm);
+            const data = Object.fromEntries(formData);
+
+            // Remove empty fields
+            Object.keys(data).forEach(key => {
+                if (data[key] === '') data[key] = null;
+            });
+
+            try {
+                const response = await app.apiRequest('profile.php', {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                if (response.success) {
+                    app.showToast('Profile updated successfully!', 'success');
+
+                    // Update stored user data
+                    if (app.state.user) {
+                        Object.assign(app.state.user, data);
+                        localStorage.setItem('user_data', JSON.stringify(app.state.user));
+                        app.updateNavigation();
                     }
                 } else {
-                    confirmPassword.classList.remove('error');
-                    if (errorEl) errorEl.classList.remove('visible');
+                    app.showToast(response.message || 'Update failed.', 'error');
                 }
-            });
+
+            } catch (error) {
+                app.showToast(error.message || 'Failed to update profile.', 'error');
+            } finally {
+                this.setLoading(submitBtn, false);
+            }
+        });
+    }
+
+    /**
+     * Setup password change form
+     */
+    setupPasswordChangeForm() {
+        const passwordForm = document.getElementById('password-form');
+        if (!passwordForm) return;
+
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!this.validatePasswordForm(passwordForm)) return;
+
+            const submitBtn = passwordForm.querySelector('button[type="submit"]');
+            this.setLoading(submitBtn, true);
+
+            const formData = new FormData(passwordForm);
+
+            try {
+                const response = await app.apiRequest('profile.php?action=password', {
+                    method: 'PUT',
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+
+                if (response.success) {
+                    app.showToast('Password changed successfully!', 'success');
+                    passwordForm.reset();
+                } else {
+                    app.showToast(response.message || 'Password change failed.', 'error');
+                }
+
+            } catch (error) {
+                app.showToast(error.message || 'Failed to change password.', 'error');
+            } finally {
+                this.setLoading(submitBtn, false);
+            }
+        });
+    }
+
+    /**
+     * Load profile data into form
+     */
+    async loadProfileData(form) {
+        try {
+            const response = await app.apiRequest('profile.php');
+
+            if (response.success && response.profile) {
+                const profile = response.profile;
+
+                Object.entries(profile).forEach(([key, value]) => {
+                    const input = form.querySelector(`[name="${key}"]`);
+                    if (input && value !== null) {
+                        if (input.type === 'select-one') {
+                            input.value = value;
+                        } else {
+                            input.value = value;
+                        }
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load profile:', error);
         }
     }
 
@@ -158,45 +277,89 @@ class AuthManager {
         let isValid = true;
         this.clearErrors(form);
 
-        const username = form.querySelector('#username');
-        const email = form.querySelector('#email');
-        const password = form.querySelector('#password');
-        const confirmPassword = form.querySelector('#confirm_password');
+        const fields = {
+            'username': {
+                value: form.querySelector('#username')?.value?.trim(),
+                rules: [
+                    { test: v => v.length >= 3, message: 'Username must be at least 3 characters.' },
+                    { test: v => v.length <= 50, message: 'Username must not exceed 50 characters.' },
+                    { test: v => /^[a-zA-Z0-9_]+$/.test(v), message: 'Only letters, numbers, and underscores allowed.' }
+                ]
+            },
+            'email': {
+                value: form.querySelector('#email')?.value?.trim(),
+                rules: [
+                    { test: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), message: 'Please enter a valid email address.' }
+                ]
+            },
+            'first_name': {
+                value: form.querySelector('#first_name')?.value?.trim(),
+                rules: [
+                    { test: v => v.length > 0, message: 'First name is required.' },
+                    { test: v => v.length <= 50, message: 'First name must not exceed 50 characters.' }
+                ]
+            },
+            'last_name': {
+                value: form.querySelector('#last_name')?.value?.trim(),
+                rules: [
+                    { test: v => v.length > 0, message: 'Last name is required.' },
+                    { test: v => v.length <= 50, message: 'Last name must not exceed 50 characters.' }
+                ]
+            },
+            'password': {
+                value: form.querySelector('#password')?.value,
+                rules: [
+                    { test: v => v.length >= 8, message: 'Password must be at least 8 characters.' },
+                    { test: v => /^(?=.*[A-Za-z])(?=.*\d)/.test(v), message: 'Must contain at least one letter and one number.' }
+                ]
+            },
+            'confirm_password': {
+                value: form.querySelector('#confirm_password')?.value,
+                rules: [
+                    { test: v => v === form.querySelector('#password')?.value, message: 'Passwords do not match.' }
+                ]
+            }
+        };
 
-        // Username validation
-        const usernameValue = username.value.trim();
-        const usernameRegex = /^[a-zA-Z0-9_]+$/;
+        Object.entries(fields).forEach(([fieldName, field]) => {
+            const input = form.querySelector(`#${fieldName}`);
+            if (!input) return;
 
-        if (!usernameValue) {
-            this.showFieldError(username, 'Username is required.');
-            isValid = false;
-        } else if (usernameValue.length < 3 || usernameValue.length > 50) {
-            this.showFieldError(username, 'Username must be 3-50 characters.');
-            isValid = false;
-        } else if (!usernameRegex.test(usernameValue)) {
-            this.showFieldError(username, 'Only letters, numbers, and underscores allowed.');
+            for (const rule of field.rules) {
+                if (!rule.test(field.value)) {
+                    this.showFieldError(input, rule.message);
+                    isValid = false;
+                    break;
+                }
+            }
+        });
+
+        return isValid;
+    }
+
+    /**
+     * Validate password change form
+     */
+    validatePasswordForm(form) {
+        let isValid = true;
+        this.clearErrors(form);
+
+        const currentPassword = form.querySelector('#current_password');
+        const newPassword = form.querySelector('#new_password');
+        const confirmPassword = form.querySelector('#confirm_new_password');
+
+        if (!currentPassword.value) {
+            this.showFieldError(currentPassword, 'Current password is required.');
             isValid = false;
         }
 
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email.value)) {
-            this.showFieldError(email, 'Please enter a valid email address.');
+        if (!newPassword.value || newPassword.value.length < 8) {
+            this.showFieldError(newPassword, 'New password must be at least 8 characters.');
             isValid = false;
         }
 
-        // Password validation
-        if (password.value.length < 8) {
-            this.showFieldError(password, 'Password must be at least 8 characters.');
-            isValid = false;
-        } else if (!/(?=.*[A-Za-z])(?=.*\d)/.test(password.value)) {
-            this.showFieldError(password, 'Must contain at least one letter and one number.');
-            isValid = false;
-        }
-
-        // Confirm password
-        if (password.value !== confirmPassword.value) {
-            this.showFieldError(confirmPassword, 'Passwords do not match.');
+        if (newPassword.value !== confirmPassword.value) {
+            this.showFieldError(confirmPassword, 'New passwords do not match.');
             isValid = false;
         }
 
@@ -204,15 +367,63 @@ class AuthManager {
     }
 
     /**
+     * Setup real-time validation
+     */
+    setupRealTimeValidation(form) {
+        const fields = ['username', 'email', 'first_name', 'last_name', 'password', 'confirm_password'];
+
+        fields.forEach(fieldName => {
+            const field = form.querySelector(`#${fieldName}`);
+            if (!field) return;
+
+            field.addEventListener('blur', () => {
+                // Re-validate on blur
+                if (fieldName === 'confirm_password') {
+                    const password = form.querySelector('#password');
+                    if (field.value && password.value && field.value !== password.value) {
+                        this.showFieldError(field, 'Passwords do not match.');
+                    } else {
+                        this.clearFieldError(field);
+                    }
+                }
+            });
+
+            field.addEventListener('input', () => {
+                this.clearFieldError(field);
+            });
+        });
+    }
+
+    /**
      * Show field-level error
      */
     showFieldError(input, message) {
         input.classList.add('error');
-        const errorEl = document.getElementById(`${input.id}-error`) ||
-            input.parentElement.querySelector('.form-error-message');
+        input.setAttribute('aria-invalid', 'true');
+
+        let errorEl = input.parentElement.querySelector('.form-error-message');
+        if (!errorEl) {
+            errorEl = document.createElement('span');
+            errorEl.className = 'form-error-message';
+            errorEl.setAttribute('role', 'alert');
+            input.parentElement.appendChild(errorEl);
+        }
+
+        errorEl.textContent = message;
+        errorEl.classList.add('visible');
+    }
+
+    /**
+     * Clear field error
+     */
+    clearFieldError(input) {
+        input.classList.remove('error');
+        input.removeAttribute('aria-invalid');
+
+        const errorEl = input.parentElement.querySelector('.form-error-message');
         if (errorEl) {
-            errorEl.textContent = message;
-            errorEl.classList.add('visible');
+            errorEl.classList.remove('visible');
+            errorEl.textContent = '';
         }
     }
 
@@ -220,7 +431,10 @@ class AuthManager {
      * Clear all form errors
      */
     clearErrors(form) {
-        form.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+        form.querySelectorAll('.error').forEach(el => {
+            el.classList.remove('error');
+            el.removeAttribute('aria-invalid');
+        });
         form.querySelectorAll('.form-error-message').forEach(el => {
             el.classList.remove('visible');
             el.textContent = '';
@@ -231,6 +445,8 @@ class AuthManager {
      * Set loading state on button
      */
     setLoading(button, isLoading) {
+        if (!button) return;
+
         if (isLoading) {
             button.disabled = true;
             button.dataset.originalText = button.textContent;

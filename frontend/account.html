@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Your Recipe App account">
+    <meta name="description" content="Manage your Recipe App account, profile, and preferences">
     <title>My Account - Recipe App</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -29,40 +29,231 @@
 <main id="main-content" class="container" style="padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xxl);">
     <h1>My Account</h1>
 
-    <div class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
-        <h2>Profile</h2>
+    <!-- Profile Section -->
+    <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+        <h2>Profile Information</h2>
         <div id="profile-details">
             <!-- Populated by JavaScript if user is logged in -->
             <p>Please <a href="login.html">log in</a> to view your account.</p>
         </div>
-    </div>
+    </section>
 
-    <div class="card" style="padding: var(--spacing-xl);">
+    <!-- Edit Profile Form -->
+    <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+        <h2>Edit Profile</h2>
+        <form id="profile-form" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_name" class="form-label form-label-required">First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="form-input"
+                           required maxlength="50" autocomplete="given-name">
+                    <span id="first_name-error" class="form-error-message" role="alert"></span>
+                </div>
+                <div class="form-group">
+                    <label for="last_name" class="form-label form-label-required">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" class="form-input"
+                           required maxlength="50" autocomplete="family-name">
+                    <span id="last_name-error" class="form-error-message" role="alert"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="bio" class="form-label">Bio</label>
+                <textarea id="bio" name="bio" class="form-textarea" rows="4" maxlength="500"
+                          placeholder="Tell us about yourself..."></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dietary_preference" class="form-label">Dietary Preference</label>
+                    <select id="dietary_preference" name="dietary_preference" class="form-select">
+                        <option value="None">No preference</option>
+                        <option value="Vegetarian">Vegetarian</option>
+                        <option value="Vegan">Vegan</option>
+                        <option value="Non-vegetarian">Non-vegetarian</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="phone_number" class="form-label">Phone Number</label>
+                    <input type="tel" id="phone_number" name="phone_number" class="form-input"
+                           maxlength="30" autocomplete="tel">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="profile_image_url" class="form-label">Profile Image URL</label>
+                <input type="url" id="profile_image_url" name="profile_image_url" class="form-input"
+                       maxlength="500" placeholder="https://example.com/your-image.jpg">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </section>
+
+    <!-- Change Password -->
+    <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+        <h2>Change Password</h2>
+        <form id="password-form" novalidate>
+            <div class="form-group">
+                <label for="current_password" class="form-label form-label-required">Current Password</label>
+                <input type="password" id="current_password" name="current_password" class="form-input"
+                       required autocomplete="current-password">
+                <span id="current_password-error" class="form-error-message" role="alert"></span>
+            </div>
+            <div class="form-group">
+                <label for="new_password" class="form-label form-label-required">New Password</label>
+                <input type="password" id="new_password" name="new_password" class="form-input"
+                       required minlength="8" autocomplete="new-password"
+                       aria-describedby="new-password-help">
+                <span id="new-password-help" class="form-help">At least 8 characters with one letter and one number.</span>
+                <span id="new_password-error" class="form-error-message" role="alert"></span>
+            </div>
+            <div class="form-group">
+                <label for="confirm_new_password" class="form-label form-label-required">Confirm New Password</label>
+                <input type="password" id="confirm_new_password" name="confirm_new_password" class="form-input"
+                       required autocomplete="new-password">
+                <span id="confirm_new_password-error" class="form-error-message" role="alert"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Change Password</button>
+        </form>
+    </section>
+
+    <!-- Account Stats -->
+    <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+        <h2>Account Statistics</h2>
+        <div id="account-stats" class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-icon">📝</span>
+                <span class="stat-label">Recipes Created</span>
+                <span class="stat-value" id="stat-recipes">-</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⭐</span>
+                <span class="stat-label">Ratings Given</span>
+                <span class="stat-value" id="stat-ratings">-</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">💬</span>
+                <span class="stat-label">Comments</span>
+                <span class="stat-value" id="stat-comments">-</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">❤️</span>
+                <span class="stat-label">Favourites</span>
+                <span class="stat-value" id="stat-favourites">-</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Account Actions -->
+    <section class="card" style="padding: var(--spacing-xl);">
         <h2>Account Actions</h2>
-        <a href="favourites.html" class="btn btn-primary">View Favourites</a>
-        <button id="logout-btn" class="btn btn-outline">Logout</button>
-    </div>
+        <div class="action-buttons">
+            <a href="favourites.html" class="btn btn-primary">
+                <span>❤️</span> View My Favourites
+            </a>
+            <a href="recipes.html?author_id=me" class="btn btn-secondary" id="my-recipes-btn">
+                <span>📝</span> My Recipes
+            </a>
+            <button id="logout-btn" class="btn btn-outline">
+                <span>🚪</span> Logout
+            </button>
+        </div>
+    </section>
 </main>
 
 <footer class="site-footer" role="contentinfo">
     <div class="container">
-        <p>&copy; 2026 Recipe App.</p>
+        <p>&copy; <span id="current-year">2024</span> Recipe App.</p>
+        <nav aria-label="Footer navigation">
+            <a href="index.html">Home</a> |
+            <a href="recipes.html">Recipes</a> |
+            <a href="favourites.html">Favourites</a> |
+            <a href="login.html">Login</a>
+        </nav>
     </div>
 </footer>
 
 <script src="js/app.js"></script>
+<script src="js/auth.js"></script>
 <script>
-    // Populate profile if logged in
-    if (app.state.isAuthenticated) {
+    // Wait for app to initialize
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Check authentication
+        if (!app.state.isAuthenticated) {
+            document.getElementById('profile-details').innerHTML = `
+                    <div class="alert alert-info">
+                        <p>Please <a href="login.html?redirect=account.html">log in</a> to view and manage your account.</p>
+                    </div>`;
+            return;
+        }
+
         const user = app.state.user;
+
+        // Populate profile details
         document.getElementById('profile-details').innerHTML = `
-                <p><strong>Username:</strong> ${app.escapeHtml(user.username)}</p>
-                <p><strong>Name:</strong> ${app.escapeHtml(user.full_name || 'Not set')}</p>
-                <p><strong>Email:</strong> ${app.escapeHtml(user.email)}</p>
-                <p><strong>Dietary Preference:</strong> ${app.escapeHtml(user.dietary_preference || 'None')}</p>
-                <p><strong>Member since:</strong> ${app.formatDate(user.created_at || new Date())}</p>
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        ${user.profile_image_url
+            ? `<img src="${app.escapeHtml(user.profile_image_url)}" alt="${app.escapeHtml(user.first_name || user.username)}" class="avatar-image">`
+            : '<span class="avatar-placeholder">👤</span>'}
+                    </div>
+                    <div class="profile-info">
+                        <h3>${app.escapeHtml(user.first_name)} ${app.escapeHtml(user.last_name)}</h3>
+                        <p class="profile-username">@${app.escapeHtml(user.username)}</p>
+                        ${user.role !== 'User' ? `<span class="badge badge-${user.role.toLowerCase()}">${user.role}</span>` : ''}
+                    </div>
+                </div>
+                <div class="profile-details-grid">
+                    <div class="detail-item">
+                        <strong>Email:</strong> ${app.escapeHtml(user.email)}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Dietary Preference:</strong> ${app.escapeHtml(user.dietary_preference || 'None')}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Phone:</strong> ${app.escapeHtml(user.phone_number || 'Not set')}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Account Status:</strong>
+                        <span class="status-badge status-${(user.account_status || 'Active').toLowerCase()}">
+                            ${user.account_status || 'Active'}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Member since:</strong> ${app.formatDate(user.created_at)}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Last Login:</strong> ${user.last_login ? app.formatDate(user.last_login) : 'N/A'}
+                    </div>
+                </div>
+                ${user.bio ? `<p class="profile-bio">${app.escapeHtml(user.bio)}</p>` : ''}
             `;
-    }
+
+        // Set my recipes link
+        const myRecipesBtn = document.getElementById('my-recipes-btn');
+        if (myRecipesBtn && user.id) {
+            myRecipesBtn.href = `recipes.html?author_id=${user.id}`;
+        }
+
+        // Load account stats
+        try {
+            const statsResponse = await app.apiRequest('profile.php?stats=true');
+            if (statsResponse.success) {
+                document.getElementById('stat-recipes').textContent = statsResponse.stats.recipe_count || 0;
+                document.getElementById('stat-ratings').textContent = statsResponse.stats.rating_count || 0;
+                document.getElementById('stat-comments').textContent = statsResponse.stats.comment_count || 0;
+                document.getElementById('stat-favourites').textContent = statsResponse.stats.favourite_count || 0;
+            }
+        } catch (error) {
+            console.error('Failed to load stats:', error);
+        }
+
+        // Setup password change form handler
+        if (typeof authManager !== 'undefined') {
+            authManager.setupPasswordChangeForm();
+        }
+    });
 </script>
 </body>
 </html>

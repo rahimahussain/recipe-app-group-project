@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Search and browse recipes">
+    <meta name="description" content="Search and browse our extensive collection of recipes. Filter by category, difficulty, dietary preference, and more.">
     <title>Search Recipes - Recipe App</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -12,7 +12,7 @@
 
 <header class="site-header" role="banner">
     <div class="container">
-        <a href="index.html" class="logo">
+        <a href="index.html" class="logo" aria-label="Recipe App Home">
             <span class="logo-icon">🍳</span>
             <span class="logo-text">Recipe App</span>
         </a>
@@ -20,78 +20,181 @@
         <nav class="main-nav">
             <a href="index.html" class="nav-link">Home</a>
             <a href="recipes.html" class="nav-link active">Recipes</a>
+            <a href="favourites.html" class="nav-link">Favourites</a>
             <div class="user-menu"></div>
         </nav>
     </div>
 </header>
 
-<main id="main-content" class="container" style="padding-top: var(--spacing-xl);">
-    <h1>Search Recipes</h1>
+<main id="main-content" class="container" style="padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xxl);">
+    <div class="page-header">
+        <h1>Search Recipes</h1>
+        <a href="create-recipe.html" class="btn btn-primary" id="create-recipe-btn">
+            <span>📝</span> Create Recipe
+        </a>
+    </div>
 
-    <section class="search-section" role="search" aria-label="Recipe search">
-        <form id="search-form" class="search-form">
-            <div class="form-group">
-                <label for="search-query" class="sr-only">Search recipes</label>
-                <input type="text" id="search-query" name="q" class="form-input"
-                       placeholder="Search by name or description...">
+    <!-- Search Section -->
+    <section class="search-section card" role="search" aria-label="Recipe search and filters">
+        <form id="search-form">
+            <div class="search-input-group">
+                <div class="form-group" style="flex: 1;">
+                    <label for="search-query" class="sr-only">Search recipes</label>
+                    <input type="text" id="search-query" name="q" class="form-input search-input-lg"
+                           placeholder="Search by name, description, or ingredient...">
+                    <div id="search-suggestions" class="search-suggestions" style="display: none;"></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">🔍 Search</button>
             </div>
 
-            <div class="search-filters" style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
-                <select name="category" class="form-select" aria-label="Filter by category">
-                    <option value="">All Categories</option>
-                    <!-- Populated by JS -->
-                </select>
+            <div class="search-filters">
+                <div class="filter-group">
+                    <label for="category-filter" class="filter-label">Category</label>
+                    <select id="category-filter" name="category_slug" class="form-select">
+                        <option value="">All Categories</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
 
-                <select name="difficulty" class="form-select" aria-label="Filter by difficulty">
-                    <option value="">Any Difficulty</option>
-                    <option value="Easy">Easy</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Hard">Hard</option>
-                </select>
+                <div class="filter-group">
+                    <label for="difficulty-filter" class="filter-label">Difficulty</label>
+                    <select id="difficulty-filter" name="difficulty" class="form-select">
+                        <option value="">Any</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
 
-                <select name="dietary" class="form-select" aria-label="Filter by dietary requirement">
-                    <option value="">Any Diet</option>
-                    <option value="vegetarian">Vegetarian</option>
-                    <option value="vegan">Vegan</option>
-                </select>
+                <div class="filter-group">
+                    <label for="dietary-filter" class="filter-label">Diet</label>
+                    <select id="dietary-filter" name="dietary" class="form-select">
+                        <option value="">Any</option>
+                        <option value="vegetarian">Vegetarian</option>
+                        <option value="vegan">Vegan</option>
+                        <option value="non-vegetarian">Non-Vegetarian</option>
+                    </select>
+                </div>
 
-                <input type="number" name="max_time" class="form-input"
-                       placeholder="Max time (min)" style="width: 150px;" aria-label="Maximum cooking time in minutes">
+                <div class="filter-group">
+                    <label for="cuisine-filter" class="filter-label">Cuisine</label>
+                    <input type="text" id="cuisine-filter" name="cuisine_type" class="form-input"
+                           placeholder="e.g., Italian, Indian">
+                </div>
 
-                <select name="sort" class="form-select" aria-label="Sort results">
-                    <option value="title_asc">Name (A-Z)</option>
-                    <option value="title_desc">Name (Z-A)</option>
-                    <option value="rating_desc">Highest Rated</option>
-                    <option value="rating_asc">Lowest Rated</option>
-                    <option value="time_asc">Quickest</option>
-                    <option value="time_desc">Longest</option>
-                    <option value="difficulty_asc">Easiest First</option>
-                    <option value="difficulty_desc">Hardest First</option>
-                    <option value="newest">Newest First</option>
-                </select>
+                <div class="filter-group">
+                    <label for="max-time-filter" class="filter-label">Max Time</label>
+                    <input type="number" id="max-time-filter" name="max_time" class="form-input"
+                           placeholder="Minutes" min="1">
+                </div>
 
-                <button type="submit" class="btn btn-primary">Search</button>
-                <button type="reset" class="btn btn-ghost" onclick="window.location='recipes.html'">Clear</button>
+                <div class="filter-group">
+                    <label for="min-rating-filter" class="filter-label">Min Rating</label>
+                    <select id="min-rating-filter" name="min_rating" class="form-select">
+                        <option value="">Any</option>
+                        <option value="4">4+ Stars</option>
+                        <option value="3">3+ Stars</option>
+                        <option value="2">2+ Stars</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort-filter" class="filter-label">Sort By</label>
+                    <select id="sort-filter" name="sort" class="form-select">
+                        <option value="newest">Newest</option>
+                        <option value="rating_desc">Highest Rated</option>
+                        <option value="rating_asc">Lowest Rated</option>
+                        <option value="title_asc">Name (A-Z)</option>
+                        <option value="title_desc">Name (Z-A)</option>
+                        <option value="time_asc">Quickest</option>
+                        <option value="time_desc">Longest</option>
+                        <option value="difficulty_asc">Easiest First</option>
+                        <option value="difficulty_desc">Hardest First</option>
+                        <option value="views">Most Viewed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <button type="reset" class="btn btn-ghost" onclick="window.location='recipes.html'">Clear All Filters</button>
             </div>
         </form>
     </section>
 
-    <section class="recipe-list" id="recipe-list" aria-live="polite">
-        <!-- Populated by JavaScript -->
+    <!-- Results Header -->
+    <div class="results-header">
+        <span id="result-count">Loading recipes...</span>
+    </div>
+
+    <!-- Recipe Results -->
+    <section class="recipe-list" id="recipe-list" aria-live="polite" aria-busy="true">
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading recipes...</p>
+        </div>
     </section>
 
-    <div style="text-align: center; margin: var(--spacing-xl) 0;">
-        <button id="load-more-btn" class="btn btn-secondary" style="display: none;">
+    <!-- Load More -->
+    <div class="load-more-container" style="text-align: center; margin-top: var(--spacing-xl);">
+        <button id="load-more-btn" class="btn btn-secondary btn-lg" style="display: none;">
             Load More Recipes
         </button>
+    </div>
+
+    <!-- No Results -->
+    <div id="no-results" style="display: none;">
+        <div class="empty-state">
+            <span class="empty-state-icon">🔍</span>
+            <h3>No recipes found</h3>
+            <p>Try adjusting your search filters or browse different categories.</p>
+            <a href="recipes.html" class="btn btn-primary">View All Recipes</a>
+        </div>
     </div>
 </main>
 
 <footer class="site-footer" role="contentinfo">
     <div class="container">
-        <p>&copy; 2026 Recipe App.</p>
+        <p>&copy; <span id="current-year">2024</span> Recipe App.</p>
     </div>
 </footer>
+
+<script>
+    // Load categories for filter dropdown
+    (async () => {
+        try {
+            const response = await app.apiRequest('categories.php');
+            if (response.success) {
+                const select = document.getElementById('category-filter');
+                response.categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.slug;
+                    option.textContent = `${cat.name} (${cat.recipe_count})`;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load categories:', error);
+        }
+    })();
+
+    // Apply URL parameters to form
+    (() => {
+        const params = new URLSearchParams(window.location.search);
+        const form = document.getElementById('search-form');
+
+        params.forEach((value, key) => {
+            const input = form.querySelector(`[name="${key}"]`);
+            if (input) input.value = value;
+        });
+    })();
+
+    // Show/hide create recipe button based on auth
+    if (app.state.isAuthenticated) {
+        const btn = document.getElementById('create-recipe-btn');
+        if (btn) btn.style.display = 'inline-flex';
+    }
+</script>
 
 <script src="js/app.js"></script>
 <script src="js/recipes.js"></script>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create and share your own recipe with the community">
+    <title>Create Recipe - Recipe App</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header" role="banner">
+    <div class="container">
+        <a href="index.html" class="logo" aria-label="Recipe App Home">
+            <span class="logo-icon">🍳</span>
+            <span class="logo-text">Recipe App</span>
+        </a>
+        <button class="mobile-menu-btn" aria-expanded="false" aria-label="Toggle menu">☰</button>
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="recipes.html" class="nav-link">Recipes</a>
+            <a href="favourites.html" class="nav-link">Favourites</a>
+            <div class="user-menu"></div>
+        </nav>
+    </div>
+</header>
+
+<main id="main-content" class="container" style="padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xxl);">
+    <h1>📝 Create New Recipe</h1>
+
+    <form id="create-recipe-form" novalidate class="create-recipe-form">
+        <!-- Basic Information -->
+        <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+            <h2>Basic Information</h2>
+
+            <div class="form-group">
+                <label for="recipe-title" class="form-label form-label-required">Recipe Title</label>
+                <input type="text" id="recipe-title" name="title" class="form-input"
+                       required maxlength="255" placeholder="e.g., Classic Spaghetti Bolognese">
+            </div>
+
+            <div class="form-group">
+                <label for="recipe-description" class="form-label">Description</label>
+                <textarea id="recipe-description" name="description" class="form-textarea" rows="3"
+                          placeholder="Brief description of your recipe..."></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="prep-time" class="form-label">Prep Time (minutes)</label>
+                    <input type="number" id="prep-time" name="prep_time_minutes" class="form-input"
+                           min="0" value="15">
+                </div>
+                <div class="form-group">
+                    <label for="cook-time" class="form-label">Cook Time (minutes)</label>
+                    <input type="number" id="cook-time" name="cook_time_minutes" class="form-input"
+                           min="0" value="30">
+                </div>
+                <div class="form-group">
+                    <label for="servings" class="form-label">Servings</label>
+                    <input type="number" id="servings" name="servings" class="form-input"
+                           min="1" value="4">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="difficulty" class="form-label">Difficulty</label>
+                    <select id="difficulty" name="difficulty" class="form-select">
+                        <option value="Easy">Easy</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cuisine-type" class="form-label">Cuisine Type</label>
+                    <input type="text" id="cuisine-type" name="cuisine_type" class="form-input"
+                           placeholder="e.g., Italian, Indian, French">
+                </div>
+                <div class="form-group">
+                    <label for="visibility" class="form-label">Visibility</label>
+                    <select id="visibility" name="visibility" class="form-select">
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                        <option value="Draft">Draft</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="recipe-tips" class="form-label">Tips</label>
+                <textarea id="recipe-tips" name="tips" class="form-textarea" rows="2"
+                          placeholder="Any helpful tips for making this recipe..."></textarea>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+            <h2>Categories</h2>
+            <div id="categories-checkboxes" class="checkbox-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Ingredients -->
+        <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+            <h2>Ingredients</h2>
+            <div id="ingredients-container">
+                <div class="ingredient-row">
+                    <input type="text" name="ingredients[0][name]" class="form-input"
+                           placeholder="Ingredient name" required>
+                    <input type="number" name="ingredients[0][quantity]" class="form-input"
+                           placeholder="Qty" step="0.01">
+                    <input type="text" name="ingredients[0][unit]" class="form-input"
+                           placeholder="Unit (e.g., g, ml, tbsp)">
+                </div>
+            </div>
+            <button type="button" id="add-ingredient" class="btn btn-outline btn-sm" style="margin-top: var(--spacing-md);">
+                + Add Ingredient
+            </button>
+        </section>
+
+        <!-- Steps -->
+        <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+            <h2>Instructions</h2>
+            <div id="steps-container">
+                <div class="step-row">
+                    <div class="step-header">
+                        <span class="step-number">Step 1</span>
+                    </div>
+                    <textarea name="steps[0][instruction]" class="form-textarea" rows="3"
+                              placeholder="Describe this step..." required></textarea>
+                    <input type="number" name="steps[0][duration_minutes]" class="form-input"
+                           placeholder="Duration (minutes)" min="0">
+                </div>
+            </div>
+            <button type="button" id="add-step" class="btn btn-outline btn-sm" style="margin-top: var(--spacing-md);">
+                + Add Step
+            </button>
+        </section>
+
+        <!-- Nutritional Information -->
+        <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+            <h2>Nutritional Information (Optional)</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="calories">Calories</label>
+                    <input type="number" id="calories" name="calories" class="form-input" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="protein">Protein (g)</label>
+                    <input type="number" id="protein" name="protein_g" class="form-input" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="carbs">Carbs (g)</label>
+                    <input type="number" id="carbs" name="carbs_g" class="form-input" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="fats">Fats (g)</label>
+                    <input type="number" id="fats" name="fats_g" class="form-input" step="0.01" min="0">
+                </div>
+            </div>
+        </section>
+
+        <!-- Submit -->
+        <div style="text-align: center;">
+            <button type="submit" class="btn btn-primary btn-lg">🍳 Create Recipe</button>
+        </div>
+    </form>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="container">
+        <p>&copy; <span id="current-year">2024</span> Recipe App.</p>
+    </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/recipes.js"></script>
+<script>
+    // Check authentication
+    if (!app.requireAuth()) {
+        document.getElementById('create-recipe-form').innerHTML = `
+                <div class="empty-state">
+                    <span class="empty-state-icon">🔒</span>
+                    <h3>Login Required</h3>
+                    <p>Please log in to create and share your recipes.</p>
+                    <a href="login.html?redirect=create-recipe.html" class="btn btn-primary">Log In</a>
+                </div>`;
+    }
+</script>
+</body>
+</html>
